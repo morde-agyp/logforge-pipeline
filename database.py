@@ -6,10 +6,10 @@ import sqlite3
 # ✅ 3. Save to SQLite .db
 
 def createConnection():
-    conn = sqlite3.connect("parsed_logs.db")
+    conn = sqlite3.connect("./db/parsed_logs.db")
     return conn.cursor(),conn
 
-def createTable(self,cur):
+def createTable(cur):
     cur.execute("""
         CREATE TABLE IF NOT EXISTS logs (
             ip TEXT,
@@ -22,7 +22,7 @@ def createTable(self,cur):
         )
         """)
     
-def insertData(self,conn,cur,parsed_logs):
+def insertData(conn,cur,parsed_logs):
     # Insert data
     for log in parsed_logs:
         cur.execute("""
