@@ -3,7 +3,7 @@ import sqlite3
 
 
 
-# ✅ 3. Save to SQLite .db
+
 
 def createConnection():
     conn = sqlite3.connect("./db/parsed_logs.db")
