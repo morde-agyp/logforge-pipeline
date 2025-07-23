@@ -1,7 +1,8 @@
 # Log Parsing Logic
 import re
 
-
+from database import createTable, createConnection,insertData
+from summarizer import saveTjson,saveTocsv
 
 
 log_pattern = re.compile(
@@ -15,18 +16,12 @@ log_pattern = re.compile(
     r'(?P<size>\S+)'                 # Response size
 )
 
-def readfile(file):
-    myfile = None
+def readfile(file) -> list:
+    content = None
     with open(file,'r') as file:
-        myfile = file.readlines()
+        content = file.readlines()
+    return content
 
-    return myfile
-
-
-def extractLogs(data:list):
-    for line in data:
-        dt = parse_apache_log_line(line)
-        print(dt,'\n')
 
 def parse_apache_log_line(line):
     match = log_pattern.match(line)
@@ -35,8 +30,31 @@ def parse_apache_log_line(line):
     return None
 
 
+def extractLogs(data:list) -> list:
+    
+    parsed_logs = []
+    for line in data:
+        dt = parse_apache_log_line(line)
+        parsed_logs.append(dt)
+    return parsed_logs
 
-        
-logsfile = './data/logs/apache_logs'
-data = readfile(logsfile)
-extractLogs(data)
+
+
+
+def main():
+    try:
+        logsfile = './data/logs/apache_logs'
+        data = readfile(logsfile)
+        parsed_logs = extractLogs(data)
+        cur,conn = createConnection()
+        table = createTable(cur)
+        insertData(conn,cur,parsed_logs)
+        saveTocsv(parsedLogs=parsed_logs)
+        saveTjson(parsedLogs=parsed_logs)
+    except BaseException as error:
+        print(error)
+
+
+
+if __name__ == '__main__':
+    main()
