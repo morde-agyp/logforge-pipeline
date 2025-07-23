@@ -17,10 +17,10 @@ log_pattern = re.compile(
 )
 
 def readfile(file) -> list:
-    content = None
+ 
     with open(file,'r') as file:
-        content = file.readlines()
-    return content
+        return file.readlines()
+
 
 
 def parse_apache_log_line(line):
